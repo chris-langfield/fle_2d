@@ -14,6 +14,7 @@ class FLEBasis2D:
     #   bandlimit   bandlimit parameter (scaled so that L is max suggested)
     #   eps         requested relative precision
     #   maxitr      maximum number of interations for expand method
+    #   threshold_basis_functions (testing purposes, turns off/on frequency thresholding)
     #   maxfun      maximum number of basis functions to use
     #   mode        choose either "real" or "complex" output
     #
@@ -24,6 +25,7 @@ class FLEBasis2D:
         eps,
         maxitr=None,
         maxfun=None,
+        threshold_basis_functions=False,
         mode="real",
     ):
 
@@ -32,6 +34,7 @@ class FLEBasis2D:
         assert realmode or complexmode
 
         self.complexmode = complexmode
+        self.threshold_basis_functions = threshold_basis_functions
 
         # Heuristics for choosing numsparse and maxitr
         maxitr = 1 + int(3 * np.log2(L))
@@ -918,7 +921,7 @@ class FLEBasis2D:
         lmds = lmds[idx]
 
         # {sec:bandlimit}
-        if bandlimit:
+        if bandlimit and self.threshold_basis_functions:
             for i in range(len(lmds)):
                 if lmds[ne] / (np.pi) >= (bandlimit - 1) // 2:
                     ne = ne - 1
