@@ -52,6 +52,7 @@ class FLEBasis2D:
             eps,
             maxitr,
             numsparse,
+            maxfun
         )
 
     def precomp(
