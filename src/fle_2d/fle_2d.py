@@ -484,10 +484,6 @@ class FLEBasis2D:
             if L > L1:
                 f = np.pad(f,((0,1),(0,1)))
 
-            # For small images just use matrix multiplication
-            if L < 16:
-                return (self.B.T @ f.flatten()).flatten()
-
             # Remove pixels outside disk
             f[self.idx] = 0
             f = f.flatten()
@@ -499,10 +495,6 @@ class FLEBasis2D:
             # ADD PADDING IF DIMENESIONS ODD
             if L > L1:
                 f = np.pad(f,((0,0),(0,1),(0,1)))
-
-            # For small images just use matrix multiplication
-            if L < 16:
-                return (self.B.T @ f.reshape(nf, L ** 2).T).T
 
             # Remove pixels outside disk
 
@@ -544,9 +536,6 @@ class FLEBasis2D:
                 a = a.reshape(self.ne)
 
             a = np.real(a)
-            # for small images use matrix multiplication
-            if self.L < 16:
-                return (self.B @ a).reshape(self.L, self.L)
 
         else:
             na = a.shape[0]
@@ -554,8 +543,6 @@ class FLEBasis2D:
                 a = (self.c2r @ a.T).T
 
             a = np.real(a)
-            if self.L < 16:
-                return (self.B @ a.T).reshape(na, self.L, self.L)
 
         # B1
         b = self.step3_H(a)
